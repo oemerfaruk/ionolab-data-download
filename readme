@@ -1,1 +1,3 @@
-http://www.ionolab.org/ veri indirme
+http://www.ionolab.org/ veri indirme.
+Öncelikle "loginInfo.py" içerisinde username ve password için kullanıcı bilgilerinizi girin.
+Program çalıştığı süre boyunca tarayıcının varsayılan indirme klasörüne başarılı indirmeler yapacaktır. Bu süreç boyunca aynı klasör içerisinde başka herhangi bir işlem yapmayınız
