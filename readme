@@ -1,3 +1,7 @@
 http://www.ionolab.org/ veri indirme.
+Bu program yalnızca bilimsel amaçla kullanılmalıdır. Kullanım amacı bot veya herhangi bir kötü niyet içermemelidir.
+
 Öncelikle "loginInfo.py" içerisinde username ve password için kullanıcı bilgilerinizi girin.
 Program çalıştığı süre boyunca tarayıcının varsayılan indirme klasörüne başarılı indirmeler yapacaktır. Bu süreç boyunca aynı klasör içerisinde başka herhangi bir işlem yapmayınız
+Veriler üç günlük olacak şekilde indirilir.
+İndirilmek istenen son gün herhangi bir üç günlük periyodun ilk günü olamamalıdır.
