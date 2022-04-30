@@ -14,6 +14,7 @@ Veriler üç günlük olacak şekilde indirilir.
 
 a = 1
 b = len(os.listdir("C:\\Users\\oemer\\Downloads"))
+#b değişkenine, taraycının varsayılan indirme klasörünün bulunduğu klasör yolunu kopyalayın
 log = []
 
 print("Klasördeki dosya sayısı: {}".format(b))
@@ -115,6 +116,7 @@ while(True):
             print("Tarih: " + log + "\tVeri Yok\n")
             break
         if(len(os.listdir("C:\\Users\\oemer\\Downloads")) != c):
+            #listdir içine, taraycının varsayılan indirme klasörünün bulunduğu klasör yolunu kopyalayın
             print("Tarih: " + log + "\tİndirildi..\n")
             break
 
