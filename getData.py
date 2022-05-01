@@ -41,15 +41,12 @@ def getInfoFromUser():
 def setDate(a):
     global now, day
 
-    now = a + datetime.timedelta(days=2)
+    now = a + datetime.timedelta(days=1)
     a = datetime.datetime.strftime(now, '%d-%m-%Y')
     day = datetime.datetime.strptime(a, '%d-%m-%Y')
 
-    day = day + datetime.timedelta(days=1)
+    #day = day + datetime.timedelta(days=1)
     now = datetime.datetime.strftime(day, '%d-%m-%Y')
-
-    
-    return a
 
     
 
