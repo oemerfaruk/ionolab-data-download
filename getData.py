@@ -1,18 +1,6 @@
-"""
-# Ionolab Data Download
-Bu repo Selenium kütüphanesini kullanarak [**Ionolab**](http://www.ionolab.org) üzerinden otomatik olarak veri indirmek için çalışma içerir.
-## Getting Started
-Bu program yalnızca bilimsel amaçla [**Ionolab**](http://www.ionolab.org) üzerinden veri indirmek için kullanılır. Kullanım amacı sadece bilimsel bir çalışma olmalıdır ve kullanımı bot veya harhangi bir kötü niyet içermemelidir.
-
-**_www.ionolab.org_** veri indirme.
-
-Program çalıştığı süre boyunca tarayıcının varsayılan indirme klasörüne başarılı indirmeler yapacaktır. **Bu süreç boyunca aynı klasör içerisinde başka herhangi bir işlem yapmayınız.**
-
-Veriler üç günlük olacak şekilde indirilir. İndirilmek istenen son gün herhangi bir üç günlük periyodun ilk günü olamamalıdır.
-"""
 from numpy import append
 from selenium import webdriver
-import os, time, loginInfo, datetime
+import os, time, loginInfo ,datetime
 
 print("""
 # Ionolab Data Download
@@ -27,57 +15,28 @@ Program çalıştığı süre boyunca tarayıcının varsayılan indirme klasör
 Veriler üç günlük olacak şekilde indirilir. İndirilmek istenen son gün herhangi bir üç günlük periyodun ilk günü olamamalıdır.
 """)
 
+print("Klasördeki dosya sayısı: {}".format(len(os.listdir("C:\\Users\\oemer\\Downloads"))))
+
 a = 1
 n = 0
 x = 0
-b = len(os.listdir("C:\\Users\\oemer\\Downloads")) # Varsayılan indirme klasörünün adresi
 log = []
 stationList = list()
 
-print("Klasördeki dosya sayısı: {}".format(b))
+while(True):
+    # kullanıcıdan istasyon kodlarını alıyoruz
+    inputStation = str(input("İstasyon kodunu giriniz (Bittiyse * girin): "))
+    if(inputStation == "*"): break
+    else: stationList.append(inputStation)
 
-def getInfoFromUser():
-    global station
-    global firstDay
-    global firstNow
-    global lastDay
-    global now
-    global day
+firstDay, day = datetime.datetime.strptime(str(input("Başlangıç gününü giriniz (gg aa yy): ")), '%d %m %Y')
+firstNow, now = datetime.datetime.strftime(day, '%d-%m-%Y')
+lastDay = datetime.datetime.strptime(str(input("Bitiş gününü giriniz (gg aa yy): ")), '%d %m %Y')
 
-    global day
-    global month
-    global year
+browser = webdriver.Firefox()
+browser.get("http://www.ionolab.org/index.php?page=login&language=tr")
+time.sleep(1)
 
-    # station = str(input("İstasyon kodunu giriniz: "))
-    while(True):
-        z = str(input("İstasyon kodunu giriniz (Bittiyse * girin): "))
-        if(z == "*"):
-            break
-        else:
-            stationList.append(z)
-
-
-
-    
-
-    day = datetime.datetime.strptime(str(input("Başlangıç gününü giriniz (gg aa yy): ")), '%d %m %Y')
-    now = datetime.datetime.strftime(day, '%d-%m-%Y')
-    firstDay = day
-    firstNow = now
-
-    lastDay = datetime.datetime.strptime(str(input("Bitiş gününü giriniz (gg aa yy): ")), '%d %m %Y')
-    # lastDay = datetime.datetime.strftime(lastDay, '%d %m %Y')
-
-
-
-    
-
-def openBrowser():
-    global browser
-    browser = webdriver.Firefox()
-
-    browser.get("http://www.ionolab.org/index.php?page=login&language=tr")
-    time.sleep(1)
 
 def login():
     username = browser.find_element_by_name("login_username")
@@ -91,14 +50,9 @@ def login():
 
     time.sleep(1)
 
-# day = datetime.datetime.strptime(str(input("Başlangıç gününü giriniz (gg aa yy): ")), '%d %m %Y')
-# now = datetime.datetime.strftime(day, '%d-%m-%Y')
-# lastDay = datetime.datetime.strptime(str(input("Bitiş gününü giriniz (gg aa yy): ")), '%d %m %Y')
-
-
 def loadPage():
     pass
-def getData(b):
+def getData(stationCode):
     browser.get("http://www.ionolab.org/webtec/single.html")
     time.sleep(1)
 
@@ -106,7 +60,7 @@ def getData(b):
     startDate = browser.find_element_by_xpath("/html/body/div[1]/div[3]/form/table/tbody/tr[3]/td[2]/input")
     endDate = browser.find_element_by_xpath("/html/body/div[1]/div[3]/form/table/tbody/tr[4]/td[2]/input")
 
-    receiverCode.send_keys(b)
+    receiverCode.send_keys(stationCode)
     startDate.send_keys(now)
     endDate.send_keys(now)
     setDate(day)
@@ -130,12 +84,12 @@ def setDate(a):
 
     return a
 
-getInfoFromUser()
-openBrowser()
+# getInfoFromUser()
+# openBrowser()
 login()
 
 while(True):
-    c = len(os.listdir("C:\\Users\\oemer\\Downloads")) # Varsayılan indirme klasörünün adresi
+    tempLenDownloads = len(os.listdir("C:\\Users\\oemer\\Downloads")) # Varsayılan indirme klasörünün adresindeki klasör sayısı. While içinde klasör boyutu kıyaslanacaktır.
     log = now #str(day)
     getData(stationList[n])
 
@@ -148,7 +102,7 @@ while(True):
             print(str(x) + ". data" + "\tTarih: " + log + "\tİstasyon: " + stationList[n] + "\tVeri Yok\n")
             x = x+1
             break
-        if(len(os.listdir("C:\\Users\\oemer\\Downloads")) != c): # Varsayılan indirme klasörünün adresi
+        if(len(os.listdir("C:\\Users\\oemer\\Downloads")) != tempLenDownloads): # Varsayılan indirme klasörünün adresi
             # log.append("Tarih: " + now + "\tİndirildi..\n")
             print(str(x) + ". data" + "\tTarih: " + log + "\tİstasyon: " + stationList[n] + "\tİndirildi..\n")
             x = x+1
