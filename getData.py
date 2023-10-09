@@ -11,11 +11,10 @@ Bu program yalnızca bilimsel amaçla [**Ionolab**](http://www.ionolab.org) üze
 **_www.ionolab.org_** veri indirme.
 
 Program çalıştığı süre boyunca tarayıcının varsayılan indirme klasörüne başarılı indirmeler yapacaktır. **Bu süreç boyunca aynı klasör içerisinde başka herhangi bir işlem yapmayınız.**
-
-Veriler üç günlük olacak şekilde indirilir. İndirilmek istenen son gün herhangi bir üç günlük periyodun ilk günü olamamalıdır.
+      
 """)
 
-print("Klasördeki dosya sayısı: {}".format(len(os.listdir("C:\\Users\\oemer\\Downloads"))))
+print("Klasördeki dosya sayısı: {}".format(len(os.listdir("/home/oemer/İndirilenler"))))
 
 a = 1
 n = 0
@@ -29,8 +28,11 @@ while(True):
     if(inputStation == "*"): break
     else: stationList.append(inputStation)
 
-firstDay, day = datetime.datetime.strptime(str(input("Başlangıç gününü giriniz (gg aa yy): ")), '%d %m %Y')
-firstNow, now = datetime.datetime.strftime(day, '%d-%m-%Y')
+firstDay = datetime.datetime.strptime(str(input("Başlangıç gününü giriniz (gg aa yy): ")), '%d %m %Y')
+firstNow = datetime.datetime.strftime(firstDay, '%d-%m-%Y')
+
+now = firstNow  
+day = firstDay
 lastDay = datetime.datetime.strptime(str(input("Bitiş gününü giriniz (gg aa yy): ")), '%d %m %Y')
 
 browser = webdriver.Firefox()
@@ -89,7 +91,7 @@ def setDate(a):
 login()
 
 while(True):
-    tempLenDownloads = len(os.listdir("C:\\Users\\oemer\\Downloads")) # Varsayılan indirme klasörünün adresindeki klasör sayısı. While içinde klasör boyutu kıyaslanacaktır.
+    tempLenDownloads = len(os.listdir("/home/oemer/İndirilenler")) # Varsayılan indirme klasörünün adresindeki klasör sayısı. While içinde klasör boyutu kıyaslanacaktır.
     log = now #str(day)
     getData(stationList[n])
 
@@ -102,12 +104,18 @@ while(True):
             print(str(x) + ". data" + "\tTarih: " + log + "\tİstasyon: " + stationList[n] + "\tVeri Yok\n")
             x = x+1
             break
-        if(len(os.listdir("C:\\Users\\oemer\\Downloads")) != tempLenDownloads): # Varsayılan indirme klasörünün adresi
+        if(len(os.listdir("/home/oemer/İndirilenler")) != tempLenDownloads): # Varsayılan indirme klasörünün adresi
             # log.append("Tarih: " + now + "\tİndirildi..\n")
             print(str(x) + ". data" + "\tTarih: " + log + "\tİstasyon: " + stationList[n] + "\tİndirildi..\n")
             x = x+1
-            break
 
+            os.chdir("/home/oemer/İndirilenler")
+            name = str(now) + " " + str(stationList[n]) + ".xls"
+            os.rename("single.xls", name)
+
+            break
+    
+    
     if(day > lastDay):
         n = n + 1
         day = firstDay
@@ -115,5 +123,6 @@ while(True):
         if(n == len(stationList)):
             break
 
+    
 exitClick = str(input("Çıkmak için bir karakter giriniz\t"))
 browser.close()
